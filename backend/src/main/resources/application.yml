@@ -1,0 +1,54 @@
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: ConnectAI-Backend
+  
+  # Database Configuration (PostgreSQL default with H2 fallback)
+  datasource:
+    url: ${DATABASE_URL:jdbc:h2:mem:connectaidb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    driver-class-name: ${DATABASE_DRIVER:org.h2.Driver}
+    username: ${DATABASE_USERNAME:sa}
+    password: ${DATABASE_PASSWORD:password}
+
+  # JPA & Hibernate
+  jpa:
+    database-platform: ${JPA_DIALECT:org.hibernate.dialect.H2Dialect}
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  # H2 Web Console (accessible at /h2-console for local inspection)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+# ConnectAI Security & JWT Configuration
+connectai:
+  jwt:
+    secret: ${JWT_SECRET:ConnectAISecretKeyForJwtAuthenticationMustBeAtLeast256BitsLong20262027}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000} # 24 hours
+  
+  # Google OAuth Configuration
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:connectai-google-client-id-akgec-2026}
+    client-secret: ${GOOGLE_CLIENT_SECRET:connectai-google-client-secret}
+
+  # AI Assistance Suite Configuration
+  ai:
+    api-key: ${AI_API_KEY:connectai-gemini-ai-key-demo}
+    model: ${AI_MODEL:gemini-1.5-flash}
+    mock-fallback-enabled: true
+
+# CORS Configuration
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173}

@@ -1,0 +1,25 @@
+{
+  "name": "connectai-people-chat-application",
+  "version": "1.0.0",
+  "description": "ConnectAI – AI Integrated People Chat Application (AKGEC B.Tech IT Major Project 2026-2027)",
+  "main": "serve.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node serve.js",
+    "start": "node serve.js",
+    "serve": "node serve.js",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build",
+    "frontend:install": "npm --prefix frontend install"
+  },
+  "keywords": [
+    "connectai",
+    "people-chat",
+    "real-time-chat",
+    "spring-boot",
+    "react",
+    "ai-assistance"
+  ],
+  "author": "Abdul Mannan, Aditya Maurya, Aditya Vishwakarma, Abhishek Gangwar",
+  "license": "MIT"
+}

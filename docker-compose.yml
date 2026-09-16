@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Service
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: connectai-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: connectaidb
+      POSTGRES_USER: connectai_user
+      POSTGRES_PASSWORD: connectai_secure_password_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - connectai-network
+
+  # 2. Spring Boot 3.2+ Backend Service
+  backend-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: connectai-backend
+    restart: unless-stopped
+    depends_on:
+      - postgres-db
+    environment:
+      PORT: 8080
+      DATABASE_URL: jdbc:postgresql://postgres-db:5432/connectaidb
+      DATABASE_DRIVER: org.postgresql.Driver
+      DATABASE_USERNAME: connectai_user
+      DATABASE_PASSWORD: connectai_secure_password_2026
+      JPA_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      JWT_SECRET: ConnectAISecretKeyForJwtAuthenticationMustBeAtLeast256BitsLong20262027
+      JWT_EXPIRATION_MS: 86400000
+      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:5173,http://localhost:80
+    ports:
+      - "8080:8080"
+    networks:
+      - connectai-network
+
+  # 3. React Frontend & Live Server Service
+  frontend-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: connectai-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend-api
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+    networks:
+      - connectai-network
+
+networks:
+  connectai-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

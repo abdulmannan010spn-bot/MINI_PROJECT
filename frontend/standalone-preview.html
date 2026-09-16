@@ -1,0 +1,2472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AI-Integrated People Chat Application - AKGEC (2026-2027)</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons Library (CDN) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- React 18 & ReactDOM (CDN) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel Standalone for In-Browser JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg-main: #0c0e14;
+      --bg-secondary: #131722;
+      --bg-tertiary: #1c2230;
+      --bg-surface: #161b28;
+      --bg-hover: #22293b;
+      --bg-active: #2d364d;
+      
+      /* Coolors Palette (Solid Flat Colors): #f7b267 - #f79d65 - #f4845f - #f27059 - #f25c54 */
+      --color-c1: #f7b267;
+      --color-c2: #f79d65;
+      --color-c3: #f4845f;
+      --color-c4: #f27059;
+      --color-c5: #f25c54;
+
+      --color-primary: #f4845f;
+      --color-primary-hover: #f25c54;
+      --color-primary-light: rgba(244, 132, 95, 0.15);
+      --color-ai: #f79d65;
+      --color-accent: #f7b267;
+      --color-success: #10b981;
+      --color-danger: #f25c54;
+      --text-primary: #fdfdfd;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #263044;
+      --border-light: rgba(247, 178, 103, 0.15);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+      --header-height: 60px;
+      --sidebar-width: 320px;
+      --ai-panel-width: 360px;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+    }
+
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      -ms-overflow-style: none; 
+      scrollbar-width: none; 
+      -webkit-tap-highlight-color: transparent;
+    }
+    ::-webkit-scrollbar { display: none; width: 0px; height: 0px; }
+    
+    body, html, #root { 
+      height: 100%; 
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100%; 
+      font-family: var(--font-family); 
+      background-color: var(--bg-main); 
+      color: var(--text-primary); 
+      overflow: hidden; 
+    }
+
+    /* PHONE AUTH PAGE */
+    .auth-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100vw;
+      background: var(--bg-main);
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .auth-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 1.75rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      margin: auto;
+    }
+    .auth-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .phone-input-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .country-select {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      padding: 0.7rem 0.6rem;
+      font-size: 0.9rem;
+      outline: none;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .country-select:focus { border-color: var(--color-primary); }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+    .form-label { font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); }
+    .form-input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--color-primary); }
+
+    .otp-digit-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 0.65rem;
+      margin: 0.5rem 0;
+    }
+    .otp-digit-input {
+      width: 50px;
+      height: 52px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--color-c1);
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+    }
+    .otp-digit-input:focus { border-color: var(--color-primary); }
+
+    .divider-text {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .divider-text::before, .divider-text::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .divider-text span { padding: 0 0.75rem; }
+
+    /* MAIN APP STYLES */
+    .app-container { 
+      display: flex; 
+      flex-direction: column; 
+      height: 100%; 
+      height: 100dvh; 
+      min-height: 100dvh; 
+      width: 100vw; 
+      overflow: hidden; 
+      position: relative;
+    }
+    .navbar { 
+      height: var(--header-height); 
+      background: var(--bg-surface); 
+      border-bottom: 1px solid var(--border-color); 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 0 1.25rem; 
+      z-index: 30; 
+      flex-shrink: 0; 
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.65rem; font-weight: 700; font-size: 1.15rem; color: var(--text-primary); text-decoration: none; cursor: pointer; }
+    .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: var(--color-c4); display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0; }
+    .brand-tag { font-size: 0.68rem; padding: 2px 6px; background: rgba(247, 157, 101, 0.2); color: var(--color-c1); border-radius: 4px; border: 1px solid rgba(247, 157, 101, 0.4); margin-left: 6px; font-weight: 600; text-transform: uppercase; }
+    
+    .nav-center-badge { display: flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.12); color: var(--color-success); border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 500; }
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background-color: var(--color-success); animation: pulse 2s infinite; flex-shrink: 0; }
+    @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 70% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
+    
+    .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
+    .btn-device-connect {
+      background: rgba(244, 132, 95, 0.15);
+      border: 1px solid var(--color-c3);
+      color: var(--color-c1);
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-device-connect:hover { background: rgba(244, 132, 95, 0.25); }
+
+    .btn-ai-toggle { background: rgba(247, 157, 101, 0.15); border: 1px solid rgba(247, 157, 101, 0.4); color: var(--color-c1); padding: 0.4rem 0.75rem; border-radius: var(--radius-md); display: flex; align-items: center; gap: 0.45rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+    .btn-ai-toggle:hover { background: rgba(247, 157, 101, 0.25); }
+    
+    .user-profile-badge { 
+      display: flex; 
+      align-items: center; 
+      gap: 0.45rem; 
+      padding: 0.35rem 0.75rem; 
+      border-radius: var(--radius-full); 
+      background: var(--bg-tertiary); 
+      border: 1px solid var(--border-color); 
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.15s ease;
+    }
+    .user-profile-badge:hover { border-color: var(--color-primary); }
+
+    .dashboard-layout { 
+      display: flex; 
+      flex: 1; 
+      height: calc(100% - var(--header-height)); 
+      height: calc(100dvh - var(--header-height));
+      width: 100vw; 
+      overflow: hidden; 
+      position: relative; 
+    }
+    .sidebar { width: var(--sidebar-width); background: var(--bg-surface); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; z-index: 20; height: 100%; overflow: hidden; }
+    .sidebar-header { padding: 0.85rem 1rem 0.5rem 1rem; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .sidebar-title { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
+    .search-box { padding: 0.35rem 1rem; position: relative; flex-shrink: 0; }
+    .search-input { width: 100%; padding: 0.55rem 0.85rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.85rem; outline: none; }
+    .filter-tabs { display: flex; padding: 0.35rem 1rem; gap: 0.4rem; flex-shrink: 0; }
+    .filter-tab { flex: 1; padding: 0.35rem 0.5rem; border-radius: var(--radius-sm); background: transparent; border: 1px solid transparent; color: var(--text-secondary); font-size: 0.78rem; font-weight: 500; cursor: pointer; text-align: center; }
+    .filter-tab.active { background: var(--bg-tertiary); color: var(--text-primary); border-color: var(--border-color); }
+    
+    .conversations-list { flex: 1; overflow-y: auto; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; min-height: 0; }
+    .conversation-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0.9rem; border-radius: var(--radius-md); cursor: pointer; position: relative; user-select: none; }
+    .conversation-item:hover { background: var(--bg-hover); }
+    .conversation-item.active { background: var(--bg-active); border-left: 3px solid var(--color-primary); }
+    
+    .conv-status-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .conv-status-dot.online { background: var(--color-success); }
+    .conv-status-dot.offline { background: var(--text-muted); }
+
+    .conv-details { flex: 1; min-width: 0; }
+    .conv-top-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.2rem; }
+    .conv-name { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .conv-time { font-size: 0.7rem; color: var(--text-muted); }
+    .conv-bottom-row { display: flex; justify-content: space-between; align-items: center; }
+    .conv-last-msg { font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+    .unread-badge { background: var(--color-primary); color: white; font-size: 0.68rem; font-weight: 700; padding: 2px 6px; border-radius: var(--radius-full); }
+
+    .chat-main { flex: 1; display: flex; flex-direction: column; background: var(--bg-main); height: 100%; position: relative; overflow: hidden; min-width: 0; }
+    .chat-header { height: var(--header-height); background: var(--bg-surface); border-bottom: 1px solid var(--border-color); padding: 0 1rem; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .chat-header-info { display: flex; align-items: center; gap: 0.65rem; min-width: 0; }
+    .chat-header-title { font-size: 0.98rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-header-subtitle { font-size: 0.72rem; color: var(--color-success); display: flex; align-items: center; gap: 4px; }
+    .chat-header-actions { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
+    .btn-icon { background: transparent; border: 1px solid var(--border-light); color: var(--text-secondary); width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+    .btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+    .mobile-back-btn { display: none; }
+
+    .in-chat-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .messages-stream { flex: 1; overflow-y: auto; padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; min-height: 0; }
+    .message-date-divider { display: flex; align-items: center; justify-content: center; margin: 0.35rem 0; }
+    .message-date-divider span { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.2rem 0.65rem; border-radius: var(--radius-full); font-size: 0.68rem; color: var(--text-muted); }
+    .message-row { display: flex; flex-direction: column; max-width: 76%; position: relative; }
+    .message-row.sent { align-self: flex-end; align-items: flex-end; }
+    .message-row.received { align-self: flex-start; align-items: flex-start; }
+    
+    .message-bubble { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 0.7rem 0.95rem; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.25); display: flex; flex-direction: column; gap: 0.3rem; width: 100%; }
+    .message-row.sent .message-bubble { background: var(--color-c4); border: 1px solid var(--color-c4); border-bottom-right-radius: 4px; }
+    .message-row.received .message-bubble { border-bottom-left-radius: 4px; }
+    .message-sender-name { font-size: 0.75rem; font-weight: 600; color: var(--color-c1); }
+    .message-text { font-size: 0.92rem; line-height: 1.45; color: var(--text-primary); word-break: break-word; white-space: pre-wrap; }
+    .message-meta { display: flex; align-items: center; justify-content: flex-end; gap: 0.4rem; font-size: 0.68rem; color: rgba(255, 255, 255, 0.75); }
+
+    /* REAL VOICE NOTE PLAYER */
+    .voice-note-bubble {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.55rem 0.75rem;
+      border-radius: var(--radius-md);
+      margin-top: 4px;
+      min-width: 200px;
+    }
+    .btn-play-voice {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      border: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.1s ease;
+    }
+    .btn-play-voice:hover { transform: scale(1.08); }
+    .btn-play-voice.playing { background: var(--color-success); }
+    .voice-wave {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 22px;
+      flex: 1;
+    }
+    .wave-bar {
+      width: 3px;
+      background: var(--color-c1);
+      border-radius: 2px;
+      transition: height 0.15s ease;
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--color-c1);
+      padding: 0.35rem 1rem;
+      font-style: italic;
+    }
+
+    .smart-replies-container { padding: 0.4rem 1rem; background: var(--bg-surface); border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.5rem; overflow-x: auto; white-space: nowrap; flex-shrink: 0; }
+    .smart-reply-label { display: flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 600; color: var(--color-c1); flex-shrink: 0; }
+    .smart-reply-chip { background: rgba(247, 178, 103, 0.12); border: 1px solid rgba(247, 178, 103, 0.3); color: var(--color-c1); padding: 0.3rem 0.75rem; border-radius: var(--radius-full); font-size: 0.78rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .smart-reply-chip:hover { background: rgba(247, 178, 103, 0.25); border-color: var(--color-c2); }
+
+    .chat-input-container { 
+      padding: 0.65rem 1rem calc(0.65rem + env(safe-area-inset-bottom, 0px)) 1rem; 
+      background: var(--bg-surface); 
+      border-top: 1px solid var(--border-color); 
+      display: flex; 
+      align-items: center; 
+      gap: 0.5rem; 
+      flex-shrink: 0;
+    }
+    .chat-input-wrapper { flex: 1; position: relative; display: flex; align-items: center; min-width: 0; }
+    .chat-textarea { 
+      width: 100%; 
+      min-height: 42px; 
+      max-height: 120px; 
+      padding: 0.65rem 0.85rem; 
+      background: var(--bg-secondary); 
+      border: 1px solid var(--border-color); 
+      border-radius: var(--radius-md); 
+      color: var(--text-primary); 
+      font-size: 0.92rem; 
+      resize: none; 
+      outline: none; 
+      font-family: inherit; 
+    }
+    .chat-textarea:focus { border-color: var(--color-primary); }
+    .btn-send { background: var(--color-primary); color: white; border: none; width: 42px; height: 42px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+    .btn-send:hover { background: var(--color-primary-hover); }
+
+    .ai-panel { width: var(--ai-panel-width); background: var(--bg-surface); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; flex-shrink: 0; z-index: 20; height: 100%; overflow: hidden; }
+    .ai-panel-header { padding: 1rem 1.15rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .ai-panel-title { display: flex; align-items: center; gap: 0.5rem; font-size: 0.98rem; font-weight: 700; color: var(--color-c1); }
+    .ai-panel-content { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+    .ai-feature-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .ai-feature-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.86rem; font-weight: 600; color: var(--text-primary); }
+    .ai-select { width: 100%; padding: 0.45rem 0.7rem; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.82rem; outline: none; }
+    .btn-ai-action { background: var(--color-c3); color: white; border: none; padding: 0.5rem 0.85rem; border-radius: var(--radius-md); font-size: 0.82rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.45rem; cursor: pointer; }
+    .btn-ai-action:hover { background: var(--color-c4); }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 80; }
+    .modal-content { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; margin: auto; }
+    .modal-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem; overflow-y: auto; }
+    .modal-footer { padding: 0.85rem 1.25rem; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: flex-end; gap: 0.65rem; flex-shrink: 0; }
+    .btn-secondary { background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.5rem 0.9rem; border-radius: var(--radius-md); font-size: 0.82rem; font-weight: 500; cursor: pointer; }
+    .btn-secondary:hover { background: var(--bg-hover); }
+    .btn-primary { background: var(--color-primary); border: none; color: white; padding: 0.5rem 0.9rem; border-radius: var(--radius-md); font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .btn-primary:hover { background: var(--color-primary-hover); }
+
+    /* ========================================== */
+    /* 📱 MOBILE RESPONSIVE TWEAKS               */
+    /* ========================================== */
+    @media screen and (max-width: 1024px) {
+      .ai-panel { position: absolute; right: 0; top: 0; bottom: 0; height: 100%; transform: translateX(100%); transition: transform 0.25s ease; }
+      .ai-panel.open { transform: translateX(0); }
+    }
+
+    @media screen and (max-width: 768px) {
+      :root {
+        --header-height: 56px;
+      }
+      .navbar { padding: 0 0.75rem; }
+      .brand-tag { display: none; }
+      .nav-center-badge { display: none; }
+      .btn-device-connect span { display: none; }
+      .btn-ai-toggle span { display: none; }
+      .user-profile-badge span { max-width: 85px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+      /* Mobile Screen Transition (List <-> Active Chat) */
+      .dashboard-layout.mobile-mode-list .sidebar {
+        display: flex !important;
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 10;
+      }
+      .dashboard-layout.mobile-mode-list .chat-main {
+        display: none !important;
+      }
+
+      .dashboard-layout.mobile-mode-chat .sidebar {
+        display: none !important;
+      }
+      .dashboard-layout.mobile-mode-chat .chat-main {
+        display: flex !important;
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 10;
+      }
+
+      .mobile-back-btn {
+        display: inline-flex !important;
+      }
+
+      .chat-header {
+        padding: 0 0.75rem;
+      }
+
+      .messages-stream {
+        padding: 0.75rem 0.85rem;
+        gap: 0.65rem;
+      }
+
+      .message-row {
+        max-width: 88%;
+      }
+
+      .chat-input-container {
+        padding: 0.5rem 0.65rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.65rem;
+        gap: 0.35rem;
+      }
+
+      .chat-textarea {
+        font-size: 16px; /* Prevents auto-zoom in mobile Safari / Chrome */
+        padding: 0.55rem 0.75rem;
+        min-height: 40px;
+      }
+
+      .btn-icon, .btn-send {
+        width: 40px;
+        height: 40px;
+      }
+
+      .ai-panel {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 90;
+        transform: translateX(100%);
+        transition: transform 0.25s ease-in-out;
+      }
+      .ai-panel.open {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React Application Logic -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    const DEMO_PHONE_USERS = [
+      { phone: '+919876543210', formattedPhone: '+91 98765 43210', name: 'Abdul Mannan', role: 'Student Lead' },
+      { phone: '+919876543211', formattedPhone: '+91 98765 43211', name: 'Aditya Maurya', role: 'Student / Backend' },
+      { phone: '+919876543212', formattedPhone: '+91 98765 43212', name: 'Mr. Sudhakar Dwivedi', role: 'Faculty Guide' },
+      { phone: '+919876543213', formattedPhone: '+91 98765 43213', name: 'Aditya Vishwakarma', role: 'Student / Frontend' },
+      { phone: '+919876543214', formattedPhone: '+91 98765 43214', name: 'Abhishek Gangwar', role: 'Student / QA' }
+    ];
+
+    const COUNTRY_CODES = [
+      { code: '+91', flag: '🇮🇳', name: 'India (+91)' },
+      { code: '+1', flag: '🇺🇸', name: 'USA (+1)' },
+      { code: '+44', flag: '🇬🇧', name: 'UK (+44)' },
+      { code: '+971', flag: '🇦🇪', name: 'UAE (+971)' },
+      { code: '+61', flag: '🇦🇺', name: 'Australia (+61)' },
+      { code: '+49', flag: '🇩🇪', name: 'Germany (+49)' },
+      { code: '+33', flag: '🇫🇷', name: 'France (+33)' },
+      { code: '+81', flag: '🇯🇵', name: 'Japan (+81)' },
+      { code: '+86', flag: '🇨🇳', name: 'China (+86)' },
+      { code: '+7', flag: '🇷🇺', name: 'Russia (+7)' }
+    ];
+
+    function normalizePhone(input, countryCode = '+91') {
+      if (!input) return '+919876543210';
+      let cleaned = input.toString().replace(/[\s\-\(\)\.]/g, '');
+      if (!cleaned.startsWith('+')) {
+        if (cleaned.length === 10) {
+          cleaned = countryCode + cleaned;
+        } else {
+          cleaned = '+' + cleaned;
+        }
+      }
+      return cleaned;
+    }
+
+    function formatDisplayPhone(normalized) {
+      if (!normalized) return '';
+      if (normalized.startsWith('+91') && normalized.length === 13) {
+        return `+91 ${normalized.slice(3, 8)} ${normalized.slice(8)}`;
+      }
+      return normalized;
+    }
+
+    function derivePhoneProfile(rawPhone, customName = '', countryCode = '+91') {
+      const normalized = normalizePhone(rawPhone, countryCode);
+      const known = DEMO_PHONE_USERS.find(u => u.phone === normalized);
+      const name = customName && customName.trim() ? customName.trim() : (known ? known.name : `User (${normalized.slice(-4)})`);
+
+      return {
+        id: `u-${Date.now()}`,
+        name: name,
+        phone: normalized,
+        formattedPhone: formatDisplayPhone(normalized),
+        role: known?.role || 'User'
+      };
+    }
+
+    function getConversationDisplayTitle(conv, currentUser, registeredUsers = []) {
+      if (!conv) return 'Chat';
+      if (conv.isGroup) return conv.title || 'Group Chat';
+      if (conv.participants && Array.isArray(conv.participants)) {
+        const otherPhone = conv.participants.find(p => p && normalizePhone(p) !== normalizePhone(currentUser?.phone));
+        if (otherPhone) {
+          const normOther = normalizePhone(otherPhone);
+          const otherUser = registeredUsers.find(u => normalizePhone(u.phone) === normOther);
+          if (otherUser && otherUser.name) return `${otherUser.name} (${formatDisplayPhone(normOther)})`;
+          const known = DEMO_PHONE_USERS.find(u => u.phone === normOther);
+          if (known) return `${known.name} (${known.formattedPhone})`;
+          return formatDisplayPhone(normOther);
+        }
+      }
+      return conv.title || 'Direct Chat';
+    }
+
+    const SMART_REPLIES_DATA = {
+      'default': [
+        'Sounds great, let us proceed!',
+        'Understood, let me check and get back to you.',
+        'Could you provide more details on this?',
+        'Yes, that works perfectly.',
+        'I am reviewing the updates now.'
+      ]
+    };
+
+    const playNotificationSound = () => {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch (e) {}
+    };
+
+    // Synthesize audible voice playback audio note
+    const playAudibleVoiceNote = (durationSeconds = 3, onEnd) => {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const freqs = [330, 440, 520, 660, 580, 490, 440, 390];
+        
+        freqs.forEach((f, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(f, now + idx * 0.35);
+          gain.gain.setValueAtTime(0.12, now + idx * 0.35);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (idx + 1) * 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + idx * 0.35);
+          osc.stop(now + (idx + 1) * 0.35);
+        });
+
+        setTimeout(() => {
+          if (onEnd) onEnd();
+        }, freqs.length * 350);
+      } catch (e) {
+        if (onEnd) setTimeout(onEnd, 2000);
+      }
+    };
+
+    // Voice Player Component (Plays real recorded audio or synthesized voice note)
+    function VoiceNotePlayer({ msg }) {
+      const [isPlaying, setIsPlaying] = useState(false);
+      const audioRef = useRef(null);
+
+      const togglePlay = () => {
+        if (isPlaying) {
+          if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+          }
+          setIsPlaying(false);
+          return;
+        }
+
+        if (msg.audioData && msg.audioData.startsWith('data:audio')) {
+          try {
+            if (!audioRef.current) {
+              audioRef.current = new Audio(msg.audioData);
+              audioRef.current.onended = () => setIsPlaying(false);
+              audioRef.current.onerror = () => {
+                playAudibleVoiceNote(3, () => setIsPlaying(false));
+              };
+            }
+            audioRef.current.play()
+              .then(() => setIsPlaying(true))
+              .catch(() => {
+                playAudibleVoiceNote(3, () => setIsPlaying(false));
+                setIsPlaying(true);
+              });
+          } catch (e) {
+            playAudibleVoiceNote(3, () => setIsPlaying(false));
+            setIsPlaying(true);
+          }
+        } else {
+          setIsPlaying(true);
+          playAudibleVoiceNote(3, () => setIsPlaying(false));
+        }
+      };
+
+      return (
+        <div className="voice-note-bubble">
+          <button className={`btn-play-voice ${isPlaying ? 'playing' : ''}`} onClick={togglePlay}>
+            <i data-lucide={isPlaying ? "pause" : "play"} style={{ width: '15px' }}></i>
+          </button>
+          <div className="voice-wave">
+            {[10, 18, 6, 22, 14, 28, 12, 20, 16, 8, 24, 14].map((h, i) => (
+              <div 
+                key={i} 
+                className="wave-bar" 
+                style={{ 
+                  height: `${isPlaying ? Math.max(6, (h * (Math.sin(Date.now() / 200 + i) + 1.2))) : h}px`,
+                  background: isPlaying ? 'var(--color-success)' : 'var(--color-c1)' 
+                }}
+              ></div>
+            ))}
+          </div>
+          <span style={{ fontSize: '0.72rem', color: isPlaying ? 'var(--color-success)' : 'var(--text-muted)', fontWeight: 600 }}>
+            {isPlaying ? 'Playing...' : (msg.duration || 'Voice Note')}
+          </span>
+        </div>
+      );
+    }
+
+    function App() {
+      // AUTH STATE (PHONE NUMBER BASED)
+      const [currentUser, setCurrentUser] = useState(() => {
+        const saved = localStorage.getItem('ai_chat_phone_user');
+        return saved ? JSON.parse(saved) : DEMO_PHONE_USERS[0];
+      });
+      const [isLoggedIn, setIsLoggedIn] = useState(() => {
+        return localStorage.getItem('ai_chat_phone_logged_in') === 'true';
+      });
+
+      // AUTH FORM
+      const [countryCode, setCountryCode] = useState('+91');
+      const [phoneNumber, setPhoneNumber] = useState('');
+      const [userName, setUserName] = useState('');
+      const [otpModal, setOtpModal] = useState(false);
+      const [enteredOtp, setEnteredOtp] = useState(['1', '2', '3', '4']);
+      const [pendingProfile, setPendingProfile] = useState(null);
+
+      // PROFILE EDIT MODAL
+      const [profileModal, setProfileModal] = useState(false);
+      const [editName, setEditName] = useState('');
+
+      // APP DATA (DYNAMIC REAL-TIME ONLY - PHONE-KEYED)
+      const [conversations, setConversations] = useState([]);
+      const [activeId, setActiveId] = useState(null);
+      const [messages, setMessages] = useState({});
+      const [registeredUsers, setRegisteredUsers] = useState([]);
+      const [onlinePhones, setOnlinePhones] = useState([]);
+      const [networkInfo, setNetworkInfo] = useState({ ip: 'localhost', port: 3000, networkUrl: window.location.origin });
+
+      // CHAT INPUT & UI
+      const [inputText, setInputText] = useState('');
+      const [isAiOpen, setIsAiOpen] = useState(false);
+      const [filter, setFilter] = useState('all');
+      const [typingUser, setTypingUser] = useState(null);
+      const [searchQuery, setSearchQuery] = useState('');
+      const [showSearchInChat, setShowSearchInChat] = useState(false);
+      const [isRecordingVoice, setIsRecordingVoice] = useState(false);
+      const [recordingSeconds, setRecordingSeconds] = useState(0);
+
+      // MEDIA RECORDER REFS FOR REAL VOICE NOTES
+      const mediaRecorderRef = useRef(null);
+      const audioChunksRef = useRef([]);
+
+      // MODALS
+      const [deviceConnectModal, setDeviceConnectModal] = useState(false);
+      const [suggestionModal, setSuggestionModal] = useState(null);
+      const [summaryModal, setSummaryModal] = useState(false);
+      const [newChatModal, setNewChatModal] = useState(false);
+      const [newChatPhone, setNewChatPhone] = useState('');
+      const [newChatName, setNewChatName] = useState('');
+      const [newChatTab, setNewChatTab] = useState('online'); // 'online' | 'direct'
+      const [lightboxImage, setLightboxImage] = useState(null);
+      const imageAttachmentRef = useRef(null);
+
+      // AI ASSISTANT STATES
+      const [tone, setTone] = useState('formal');
+      const [lang, setLang] = useState('Hindi');
+      const [customTranslateText, setCustomTranslateText] = useState('');
+      const [isTranslating, setIsTranslating] = useState(false);
+
+      const messagesEndRef = useRef(null);
+      const sseRef = useRef(null);
+      const activeIdRef = useRef(activeId);
+      const typingTimeoutRef = useRef(null);
+      const typingThrottleRef = useRef(null);
+
+      useEffect(() => {
+        activeIdRef.current = activeId;
+        setTypingUser(null);
+      }, [activeId]);
+
+      // 1. Initial Sync & Fetch from Server (Phone-Based)
+      useEffect(() => {
+        const fetchInitialData = async () => {
+          try {
+            const res = await fetch('/api/live/sync?phone=' + encodeURIComponent(currentUser?.phone || ''));
+            if (res.ok) {
+              const data = await res.json();
+              if (data.conversations) {
+                setConversations(data.conversations);
+                if (window.innerWidth > 768 && data.conversations.length > 0 && !activeId) {
+                  setActiveId(data.conversations[0].id);
+                }
+              }
+              if (data.messages) setMessages(data.messages);
+              if (data.users) setRegisteredUsers(data.users);
+              if (data.onlinePhones) setOnlinePhones(data.onlinePhones);
+              if (data.networkUrl) setNetworkInfo(prev => ({ ...prev, networkUrl: data.networkUrl }));
+            }
+          } catch (e) {
+            console.log('Sync fallback:', e);
+          }
+        };
+
+        const fetchNetInfo = async () => {
+          try {
+            const res = await fetch('/api/live/network-info');
+            if (res.ok) {
+              const info = await res.json();
+              setNetworkInfo(info);
+              if (info.connectedPhones) {
+                setOnlinePhones(info.connectedPhones);
+              }
+            }
+          } catch (e) {}
+        };
+
+        fetchInitialData();
+        fetchNetInfo();
+      }, [currentUser?.phone]);
+
+      // 2. Real-Time Multi-Device SSE Event Stream (Phone-Based)
+      useEffect(() => {
+        if (!isLoggedIn || !currentUser?.phone) return;
+
+        const connectSSE = () => {
+          const sseUrl = `/api/live/stream?phone=${encodeURIComponent(currentUser.phone)}&name=${encodeURIComponent(currentUser.name || '')}`;
+          const es = new EventSource(sseUrl);
+          sseRef.current = es;
+
+          es.addEventListener('NEW_MESSAGE', (e) => {
+            const data = JSON.parse(e.data);
+            setMessages(prev => ({
+              ...prev,
+              [data.convId]: [...(prev[data.convId] || []), data.message]
+            }));
+            
+            // If message is in active conversation, clear typing indicator immediately
+            if (data.convId === activeIdRef.current) {
+              setTypingUser(null);
+            }
+
+            // Update or add conversation
+            setConversations(prev => {
+              const exists = prev.some(c => c.id === data.convId);
+              if (exists) {
+                return prev.map(c => {
+                  if (c.id === data.convId) {
+                    return {
+                      ...c,
+                      lastMessage: {
+                        text: data.message.text || (data.message.audio ? '🎤 Voice Message' : (data.message.image ? '📷 Photo' : 'Attachment')),
+                        timestamp: data.message.timestamp
+                      }
+                    };
+                  }
+                  return c;
+                });
+              } else if (data.conv) {
+                return [data.conv, ...prev];
+              }
+              return prev;
+            });
+
+            if (normalizePhone(data.message.senderPhone) !== normalizePhone(currentUser.phone)) {
+              playNotificationSound();
+            }
+          });
+
+          es.addEventListener('TYPING', (e) => {
+            const data = JSON.parse(e.data);
+            if (
+              data.convId && 
+              data.convId === activeIdRef.current && 
+              normalizePhone(data.userPhone) !== normalizePhone(currentUser.phone)
+            ) {
+              setTypingUser(data.userName || formatDisplayPhone(data.userPhone));
+              if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+              typingTimeoutRef.current = setTimeout(() => {
+                setTypingUser(null);
+              }, 2500);
+            }
+          });
+
+          es.addEventListener('USER_STATUS_CHANGE', (e) => {
+            const data = JSON.parse(e.data);
+            setOnlinePhones(prev => {
+              const norm = normalizePhone(data.phone);
+              if (data.isOnline) {
+                return Array.from(new Set([...prev, norm]));
+              } else {
+                return prev.filter(p => normalizePhone(p) !== norm);
+              }
+            });
+            if (data.user) {
+              setRegisteredUsers(prev => {
+                const exists = prev.some(u => normalizePhone(u.phone) === normalizePhone(data.user.phone));
+                if (!exists) return [...prev, data.user];
+                return prev.map(u => normalizePhone(u.phone) === normalizePhone(data.user.phone) ? data.user : u);
+              });
+            }
+          });
+
+          es.addEventListener('USER_JOINED', (e) => {
+            const user = JSON.parse(e.data);
+            if (user && user.phone) {
+              setRegisteredUsers(prev => {
+                const exists = prev.some(u => normalizePhone(u.phone) === normalizePhone(user.phone));
+                if (!exists) return [...prev, user];
+                return prev.map(u => normalizePhone(u.phone) === normalizePhone(user.phone) ? user : u);
+              });
+            }
+          });
+
+          es.addEventListener('PROFILE_UPDATED', (e) => {
+            const user = JSON.parse(e.data);
+            if (user && user.phone) {
+              setRegisteredUsers(prev => prev.map(u => normalizePhone(u.phone) === normalizePhone(user.phone) ? { ...u, ...user } : u));
+            }
+          });
+
+          es.addEventListener('CONVERSATION_CREATED', (e) => {
+            const newConv = JSON.parse(e.data);
+            setConversations(prev => {
+              const exists = prev.some(c => c.id === newConv.id);
+              if (exists) return prev;
+              return [newConv, ...prev];
+            });
+          });
+
+          es.onerror = () => {
+            es.close();
+            setTimeout(connectSSE, 4000);
+          };
+        };
+
+        connectSSE();
+
+        return () => {
+          if (sseRef.current) sseRef.current.close();
+        };
+      }, [isLoggedIn, currentUser?.phone]);
+
+      // Save user session
+      useEffect(() => {
+        localStorage.setItem('ai_chat_phone_user', JSON.stringify(currentUser));
+        localStorage.setItem('ai_chat_phone_logged_in', isLoggedIn ? 'true' : 'false');
+      }, [currentUser, isLoggedIn]);
+
+      useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, [messages, activeId, typingUser]);
+
+      useEffect(() => {
+        if (window.lucide) window.lucide.createIcons();
+      });
+
+      // ESC key listener to close Lightbox
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === 'Escape' && lightboxImage) {
+            setLightboxImage(null);
+          }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, [lightboxImage]);
+
+      // VOICE RECORDING TIMER
+      useEffect(() => {
+        let interval;
+        if (isRecordingVoice) {
+          interval = setInterval(() => {
+            setRecordingSeconds(s => s + 1);
+          }, 1000);
+        } else {
+          setRecordingSeconds(0);
+        }
+        return () => clearInterval(interval);
+      }, [isRecordingVoice]);
+
+      // Explicit user registration call (Phone)
+      const syncUserWithServer = async (profile) => {
+        try {
+          await fetch('/api/live/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: profile.phone, name: profile.name })
+          });
+        } catch (e) {}
+      };
+
+      // PHONE LOGIN SUBMIT -> OPENS OTP MODAL
+      const handlePhoneSubmit = (e) => {
+        e.preventDefault();
+        if (!phoneNumber || !phoneNumber.trim()) return;
+        const profile = derivePhoneProfile(phoneNumber, userName, countryCode);
+        setPendingProfile(profile);
+        setOtpModal(true);
+      };
+
+      // COMPLETE OTP VERIFICATION
+      const handleVerifyOtp = (e) => {
+        if (e) e.preventDefault();
+        if (!pendingProfile) return;
+        setCurrentUser(pendingProfile);
+        setIsLoggedIn(true);
+        setOtpModal(false);
+        syncUserWithServer(pendingProfile);
+      };
+
+      // 1-CLICK QUICK TEAM LOGIN
+      const handleQuickTeamLogin = (teamUser) => {
+        const profile = derivePhoneProfile(teamUser.phone, teamUser.name);
+        setCurrentUser(profile);
+        setIsLoggedIn(true);
+        syncUserWithServer(profile);
+      };
+
+      const handleLogout = () => {
+        setIsLoggedIn(false);
+        setActiveId(null);
+      };
+
+      // SAVE EDITED NAME
+      const handleSaveProfileName = async (e) => {
+        e.preventDefault();
+        if (!editName || !editName.trim()) return;
+        const updated = { ...currentUser, name: editName.trim() };
+        setCurrentUser(updated);
+        setProfileModal(false);
+        try {
+          await fetch('/api/live/profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: currentUser.phone, name: editName.trim() })
+          });
+        } catch (err) {}
+      };
+
+      // START CHAT WITH USER (CONNECTED PEER)
+      const startChatWithUser = async (user) => {
+        if (!user || !user.phone) return;
+        const targetPhone = normalizePhone(user.phone);
+        const currentPhone = normalizePhone(currentUser.phone);
+
+        // Check if conversation already exists
+        const existingConv = conversations.find(c =>
+          !c.isGroup && c.participants && c.participants.map(p => normalizePhone(p)).includes(targetPhone)
+        );
+
+        if (existingConv) {
+          setActiveId(existingConv.id);
+          setNewChatModal(false);
+          return;
+        }
+
+        const resolvedTitle = user.name ? `${user.name} (${formatDisplayPhone(targetPhone)})` : formatDisplayPhone(targetPhone);
+        const newConvId = `conv-${targetPhone.replace(/[^0-9]/g, '')}-${Date.now()}`;
+        const newConv = {
+          id: newConvId,
+          title: resolvedTitle,
+          isGroup: false,
+          participants: [currentPhone, targetPhone],
+          unreadCount: 0,
+          lastMessage: {
+            text: `Chat started with ${resolvedTitle}`,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        };
+
+        try {
+          await fetch('/api/live/create-conv', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ conv: newConv })
+          });
+        } catch (e) {}
+
+        setConversations(prev => [newConv, ...prev.filter(c => c.id !== newConvId)]);
+        setActiveId(newConvId);
+        setNewChatModal(false);
+      };
+
+      // START DIRECT CHAT FROM PHONE / NAME FORM
+      const handleStartDirectChat = (e) => {
+        e.preventDefault();
+        if (!newChatPhone || !newChatPhone.trim()) return;
+        const targetPhone = normalizePhone(newChatPhone);
+        const targetName = newChatName.trim() || '';
+        startChatWithUser({ phone: targetPhone, name: targetName });
+        setNewChatPhone('');
+        setNewChatName('');
+      };
+
+      // SEND LIVE MESSAGE ACROSS NETWORK (PHONE-BASED)
+      const handleSend = async (textToSend = inputText, attachment = null) => {
+        if ((!textToSend || !textToSend.trim()) && !attachment) return;
+        if (!activeId) {
+          alert('Please select or start a conversation first!');
+          return;
+        }
+
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        
+        const newMsg = {
+          id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          senderPhone: currentUser.phone,
+          senderName: currentUser.name || formatDisplayPhone(currentUser.phone),
+          text: textToSend ? textToSend.trim() : '',
+          image: attachment?.image || null,
+          audio: attachment?.audio || null,
+          audioData: attachment?.audioData || null,
+          duration: attachment?.duration || null,
+          timestamp: timeStr
+        };
+
+        const activeConvObj = conversations.find(c => c.id === activeId);
+
+        try {
+          await fetch('/api/live/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              convId: activeId,
+              message: newMsg,
+              convMeta: activeConvObj
+            })
+          });
+        } catch (e) {
+          setMessages(prev => ({
+            ...prev,
+            [activeId]: [...(prev[activeId] || []), newMsg]
+          }));
+        }
+
+        setInputText('');
+        setTypingUser(null);
+      };
+
+      // BROADCAST TYPING (PHONE-BASED)
+      const handleInputChange = (e) => {
+        setInputText(e.target.value);
+        if (!activeId) return;
+        
+        if (!typingThrottleRef.current) {
+          try {
+            fetch('/api/live/typing', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                convId: activeId,
+                userPhone: currentUser.phone,
+                userName: currentUser.name || formatDisplayPhone(currentUser.phone)
+              })
+            });
+          } catch (err) {}
+
+          typingThrottleRef.current = setTimeout(() => {
+            typingThrottleRef.current = null;
+          }, 1500);
+        }
+      };
+
+      // REAL VOICE NOTE RECORDING HANDLERS
+      const handleToggleVoiceRecord = async () => {
+        if (!activeId) {
+          alert('Please select a conversation first to record voice notes!');
+          return;
+        }
+
+        if (!isRecordingVoice) {
+          // Start Recording
+          try {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+              const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              const mediaRecorder = new MediaRecorder(stream);
+              mediaRecorderRef.current = mediaRecorder;
+              audioChunksRef.current = [];
+
+              mediaRecorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) {
+                  audioChunksRef.current.push(e.data);
+                }
+              };
+
+              mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  const base64Audio = reader.result;
+                  handleSend('', {
+                    audio: true,
+                    audioData: base64Audio,
+                    duration: `${Math.max(recordingSeconds, 1)}s`
+                  });
+                };
+                reader.readAsDataURL(audioBlob);
+
+                // Stop all tracks
+                stream.getTracks().forEach(t => t.stop());
+              };
+
+              mediaRecorder.start();
+              setIsRecordingVoice(true);
+            } else {
+              throw new Error('MediaDevices not supported');
+            }
+          } catch (err) {
+            console.warn('Using standard voice recorder fallback:', err);
+            setIsRecordingVoice(true);
+          }
+        } else {
+          // Stop & Send Voice Note
+          setIsRecordingVoice(false);
+          if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+            mediaRecorderRef.current.stop();
+          } else {
+            // Fallback audio note
+            handleSend('', {
+              audio: true,
+              audioData: 'demo-voice-note',
+              duration: `${Math.max(recordingSeconds, 2)}s`
+            });
+          }
+        }
+      };
+
+      // IMAGE ATTACHMENT
+      const handleImageAttach = (e) => {
+        if (!activeId) {
+          alert('Please select a conversation first to attach photos!');
+          return;
+        }
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          handleSend('📷 Shared a photo', { image: evt.target.result });
+        };
+        reader.readAsDataURL(file);
+        e.target.value = '';
+      };
+
+      // AI ASSISTANT FUNCTIONS
+      const handleRewrite = () => {
+        const textToTransform = inputText || (activeMsgs.length > 0 ? activeMsgs[activeMsgs.length - 1].text : '');
+        if (!textToTransform) return alert('Please enter or select a draft message first');
+
+        let res = '';
+        if (tone === 'formal') {
+          res = `I would like to respectfully inform you that ${textToTransform.charAt(0).toLowerCase() + textToTransform.slice(1)}. Please let me know if any further action is required.`;
+        } else if (tone === 'casual') {
+          res = `Hey! Just wanted to share: ${textToTransform} 😊 Let me know what you think!`;
+        } else if (tone === 'concise') {
+          res = `Key update: ${textToTransform.trim()}. Proceeding as planned.`;
+        } else if (tone === 'persuasive') {
+          res = `This is a pivotal milestone for our AKGEC Major Project: ${textToTransform}! Let us push forward and finalize this.`;
+        } else {
+          res = `Kind regards. Could you please note: ${textToTransform} Thank you very much!`;
+        }
+
+        setSuggestionModal({
+          type: 'rewrite',
+          original: textToTransform,
+          suggested: res,
+          tone: tone
+        });
+      };
+
+      // TRANSLATION DICTIONARY & API
+      const DICTIONARY = {
+        'hi': {
+          'hello': 'नमस्ते (Namaste)',
+          'hey': 'अरे (Hey)',
+          'hi': 'नमस्ते',
+          'how are you': 'आप कैसे हैं?',
+          'good morning': 'शुभ प्रभात',
+          'thank you': 'धन्यवाद (Dhanyavaad)'
+        },
+        'es': { 'hello': '¡Hola!', 'how are you': '¿Cómo estás?', 'thank you': '¡Muchas gracias!' },
+        'fr': { 'hello': 'Bonjour !', 'how are you': 'Comment allez-vous ?', 'thank you': 'Merci beaucoup !' },
+        'de': { 'hello': 'Hallo!', 'how are you': 'Wie geht es Ihnen?', 'thank you': 'Vielen Dank!' },
+        'ru': { 'hello': 'Привет!', 'thank you': 'Большое спасибо!' },
+        'ja': { 'hello': 'こんにちは (Konnichiwa)', 'thank you': 'どうもありがとうございます' },
+        'ar': { 'hello': 'مرحباً (Marhaban)', 'thank you': 'شكراً جزيلاً (Shukran)' },
+        'bn': { 'hello': 'হ্যালো / নমস্কার', 'thank you': 'ধন্যবাদ' },
+        'mr': { 'hello': 'नमस्कार (Namaskar)', 'thank you': 'धन्यवाद' }
+      };
+
+      const translateTextAsync = async (text, targetLang) => {
+        if (!text || !text.trim()) return '';
+        const clean = text.trim();
+        const lower = clean.toLowerCase();
+        
+        const LANG_CODES = {
+          'Hindi': 'hi', 'Spanish': 'es', 'French': 'fr', 'German': 'de',
+          'Russian': 'ru', 'Japanese': 'ja', 'Arabic': 'ar', 'Bengali': 'bn', 'Marathi': 'mr'
+        };
+        const code = LANG_CODES[targetLang] || 'hi';
+
+        if (DICTIONARY[code] && DICTIONARY[code][lower]) {
+          return DICTIONARY[code][lower];
+        }
+
+        try {
+          const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=autodetect|${code}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.responseData?.translatedText) {
+              return data.responseData.translatedText;
+            }
+          }
+        } catch(e) {}
+
+        return `[${targetLang}]: ${clean}`;
+      };
+
+      const handleTranslate = async (customText = null) => {
+        const textToTransform = customText || customTranslateText || inputText || (activeMsgs.length > 0 ? activeMsgs[activeMsgs.length - 1].text : '');
+        if (!textToTransform || !textToTransform.trim()) return alert('Please enter text to translate');
+
+        setIsTranslating(true);
+        const translated = await translateTextAsync(textToTransform, lang);
+        setIsTranslating(false);
+
+        setSuggestionModal({
+          type: 'translate',
+          original: textToTransform,
+          suggested: translated,
+          targetLang: lang
+        });
+      };
+
+      // EXPORT SUMMARY
+      const handleDownloadSummary = () => {
+        const summaryContent = `AI-INTEGRATED PEOPLE CHAT APPLICATION
+AKGEC B.TECH IT MAJOR PROJECT (2026-2027)
+Project Guide: Mr. Sudhakar Dwivedi
+Authors: Aditya Maurya, Abdul Mannan, Aditya Vishwakarma, Abhishek Gangwar
+------------------------------------------------------------
+PHONE-AUTHENTICATED DISCUSSION SUMMARY REPORT:
+Date: ${new Date().toLocaleDateString()}
+Active Channel: ${activeConv?.title || 'General'}
+User: ${currentUser.name} (${currentUser.formattedPhone})
+
+KEY DISCUSSION POINTS:
+- Real-time cross-device communication keyed by unique phone numbers.
+- Verified instant OTP authentication & live SSE sync at ${networkInfo.networkUrl}.
+- Human-in-the-Loop AI Assistant (Live Translation, Tone Rewriting, Smart Replies, Voice Notes).
+`;
+        const blob = new Blob([summaryContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Phone_Chat_Summary_${Date.now()}.txt`;
+        a.click();
+      };
+
+      const activeConv = conversations.find(c => c.id === activeId) || null;
+      const activeMsgs = (activeId && messages[activeId] ? messages[activeId] : []).filter(m => !searchQuery || m.text?.toLowerCase().includes(searchQuery.toLowerCase()));
+      const smartReplies = SMART_REPLIES_DATA[activeId] || SMART_REPLIES_DATA.default;
+
+      // Online peer list (connected users excluding current phone)
+      const currentNormPhone = normalizePhone(currentUser.phone);
+      const onlinePeers = Array.from(new Set(
+        [
+          ...onlinePhones.filter(p => normalizePhone(p) !== currentNormPhone).map(p => {
+            const registered = registeredUsers.find(u => normalizePhone(u.phone) === normalizePhone(p));
+            return registered || derivePhoneProfile(p);
+          }),
+          ...registeredUsers.filter(u => normalizePhone(u.phone) !== currentNormPhone)
+        ].map(u => JSON.stringify(u))
+      )).map(str => JSON.parse(str));
+
+      // ==========================================
+      // RENDER 1: PHONE NUMBER AUTHENTICATION PAGE
+      // ==========================================
+      if (!isLoggedIn) {
+        return (
+          <div className="auth-container">
+            <div className="auth-card">
+              <div className="auth-header">
+                <div className="brand-icon" style={{ width: '48px', height: '48px', borderRadius: '14px' }}>
+                  <i data-lucide="smartphone" style={{ width: '26px', height: '26px' }}></i>
+                </div>
+                <h2 style={{ fontSize: '1.35rem', fontWeight: 700 }}>AI·Chat Application</h2>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
+                  Enter your mobile phone number to log in & start chatting live
+                </p>
+              </div>
+
+              {/* Direct Phone Number Login Form */}
+              <form onSubmit={handlePhoneSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+                <div className="form-group">
+                  <label className="form-label">Phone Number</label>
+                  <div className="phone-input-group">
+                    <select 
+                      className="country-select" 
+                      value={countryCode} 
+                      onChange={(e) => setCountryCode(e.target.value)}
+                    >
+                      {COUNTRY_CODES.map(c => (
+                        <option key={c.code} value={c.code}>{c.flag} {c.code}</option>
+                      ))}
+                    </select>
+                    <input 
+                      type="tel" 
+                      className="form-input" 
+                      placeholder="98765 43210" 
+                      value={phoneNumber} 
+                      onChange={(e) => setPhoneNumber(e.target.value)} 
+                      required 
+                      autoFocus
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Full Name (Your display name in chat)</label>
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    placeholder="e.g. Abdul Mannan or Aditya Maurya" 
+                    value={userName} 
+                    onChange={(e) => setUserName(e.target.value)} 
+                    required 
+                  />
+                </div>
+
+                <button type="submit" className="btn-primary" style={{ padding: '0.75rem', fontSize: '0.95rem', marginTop: '0.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <span>Continue with Phone Number</span>
+                  <i data-lucide="arrow-right" style={{ width: '16px', height: '16px' }}></i>
+                </button>
+              </form>
+
+              <div className="divider-text"><span>or 1-click team demo login</span></div>
+
+              {/* Fast 1-Click Demo Phone Logins */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textAlign: 'center', fontWeight: 600 }}>
+                  ⚡ SELECT REGISTERED AKGEC TEAM MEMBER:
+                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                  {DEMO_PHONE_USERS.map((user, i) => (
+                    <div 
+                      key={i} 
+                      onClick={() => handleQuickTeamLogin(user)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.6rem 0.85rem',
+                        background: 'var(--bg-secondary)',
+                        borderRadius: 'var(--radius-md)',
+                        cursor: 'pointer',
+                        border: '1px solid var(--border-color)',
+                        transition: 'border-color 0.15s ease'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-primary)'}
+                      onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                    >
+                      <div>
+                        <div style={{ fontSize: '0.86rem', fontWeight: 600 }}>{user.name} <span style={{ fontSize: '0.7rem', color: 'var(--color-c1)', marginLeft: '4px' }}>({user.role})</span></div>
+                        <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>📱 {user.formattedPhone}</div>
+                      </div>
+                      <i data-lucide="arrow-right" style={{ width: '15px', color: 'var(--color-primary)' }}></i>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Simulated 4-Digit OTP Verification Modal */}
+            {otpModal && pendingProfile && (
+              <div className="modal-overlay" onClick={() => setOtpModal(false)}>
+                <div className="modal-content" style={{ maxWidth: '400px', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
+                  <div className="modal-header">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <i data-lucide="shield-check" style={{ color: 'var(--color-success)', width: '20px', height: '20px' }}></i>
+                      <h3>Verify Phone Number</h3>
+                    </div>
+                    <button className="btn-icon" onClick={() => setOtpModal(false)}><i data-lucide="x"></i></button>
+                  </div>
+                  <form onSubmit={handleVerifyOtp}>
+                    <div className="modal-body" style={{ alignItems: 'center', gap: '0.85rem' }}>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        Enter the 4-digit verification code sent to <strong>{pendingProfile.formattedPhone}</strong>:
+                      </p>
+
+                      <div className="otp-digit-inputs">
+                        {enteredOtp.map((digit, idx) => (
+                          <input 
+                            key={idx}
+                            type="text" 
+                            maxLength="1"
+                            className="otp-digit-input"
+                            value={digit}
+                            onChange={(e) => {
+                              const val = e.target.value.slice(-1);
+                              const copy = [...enteredOtp];
+                              copy[idx] = val;
+                              setEnteredOtp(copy);
+                            }}
+                          />
+                        ))}
+                      </div>
+
+                      <div style={{ background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '0.5rem 0.75rem', borderRadius: '8px', fontSize: '0.76rem', color: 'var(--color-success)', width: '100%' }}>
+                        ✅ Demo OTP Code is <strong>1234</strong> (Instant Verification)
+                      </div>
+                    </div>
+                    <div className="modal-footer" style={{ justifyContent: 'center' }}>
+                      <button type="submit" className="btn-primary" style={{ width: '100%', padding: '0.7rem' }}>
+                        Verify & Start Chatting
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // ==========================================
+      // RENDER 2: MAIN DASHBOARD & LIVE CHAT (RESPONSIVE)
+      // ==========================================
+      const mobileModeClass = activeId ? 'mobile-mode-chat' : 'mobile-mode-list';
+
+      return (
+        <div className="app-container">
+          {/* Header Navbar */}
+          <header className="navbar">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <div className="nav-brand" onClick={() => setActiveId(null)}>
+                <div className="brand-icon">
+                  <i data-lucide="sparkles" style={{ width: '18px', height: '18px' }}></i>
+                </div>
+                <div>
+                  <span className="brand-main-text">AI·Chat</span>
+                  <span className="brand-tag">AKGEC IT 2026-27</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="nav-center-badge">
+              <span className="pulse-dot"></span>
+              <span>Live Multi-Device Network Chat Active</span>
+            </div>
+
+            <div className="nav-actions">
+              {/* Share Web Link for Multi-Device Access */}
+              <button className="btn-device-connect" onClick={() => setDeviceConnectModal(true)} title="Share Web Link for Multi-Device Access">
+                <i data-lucide="share-2" style={{ width: '15px', height: '15px' }}></i>
+                <span>🔗 Share Link</span>
+              </button>
+
+              <button className="btn-ai-toggle" onClick={() => setIsAiOpen(!isAiOpen)} title="AI Assistant Suite">
+                <i data-lucide="bot" style={{ width: '15px', height: '15px' }}></i>
+                <span>AI Assistant</span>
+              </button>
+              
+              {/* User Profile Badge (Shows Name & Phone Number) */}
+              <div 
+                className="user-profile-badge" 
+                onClick={() => { setEditName(currentUser.name); setProfileModal(true); }}
+                title="Click to edit Display Name"
+              >
+                <i data-lucide="phone" style={{ width: '13px', height: '13px', color: 'var(--color-c1)' }}></i>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>{currentUser.name}</span>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>({currentUser.formattedPhone || currentUser.phone})</span>
+                <i data-lucide="pencil" style={{ width: '11px', height: '11px', color: 'var(--text-muted)' }}></i>
+              </div>
+
+              <button className="btn-icon" onClick={handleLogout} title="Log Out">
+                <i data-lucide="log-out" style={{ width: '16px', height: '16px' }}></i>
+              </button>
+            </div>
+          </header>
+
+          {/* 3-Column / Mobile Single-Screen Layout */}
+          <div className={`dashboard-layout ${mobileModeClass}`}>
+            {/* Sidebar (Conversations & Connected Peers) */}
+            <aside className="sidebar">
+              <div className="sidebar-header">
+                <h2 className="sidebar-title">Conversations</h2>
+                <button 
+                  className="btn-icon" 
+                  style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}
+                  onClick={() => setNewChatModal(true)}
+                  title="Start New Chat"
+                >
+                  <i data-lucide="message-square-plus" style={{ width: '18px', height: '18px' }}></i>
+                </button>
+              </div>
+
+              <div className="search-box">
+                <input 
+                  type="text" 
+                  className="search-input" 
+                  placeholder="Search by name or phone..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+
+              <div className="filter-tabs">
+                <button className={`filter-tab ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>All</button>
+                <button className={`filter-tab ${filter === 'direct' ? 'active' : ''}`} onClick={() => setFilter('direct')}>Direct</button>
+                <button className={`filter-tab ${filter === 'group' ? 'active' : ''}`} onClick={() => setFilter('group')}>Groups</button>
+              </div>
+
+              {/* Conversations List */}
+              <div className="conversations-list">
+                {conversations.length === 0 ? (
+                  <div style={{ padding: '2rem 1rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                    <i data-lucide="message-square" style={{ width: '36px', height: '36px', margin: '0 auto 0.75rem', opacity: 0.35, color: 'var(--color-primary)' }}></i>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.35rem' }}>No Active Chats</div>
+                    <p style={{ fontSize: '0.76rem', lineHeight: 1.4, marginBottom: '1rem' }}>
+                      Start a chat with an online peer or wait for a peer to connect!
+                    </p>
+                    <button 
+                      className="btn-primary" 
+                      style={{ width: '100%', fontSize: '0.8rem', padding: '0.55rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                      onClick={() => setNewChatModal(true)}
+                    >
+                      <i data-lucide="user-plus" style={{ width: '14px', height: '14px' }}></i>
+                      <span>Start New Chat</span>
+                    </button>
+                  </div>
+                ) : (
+                  conversations
+                    .filter(c => filter === 'all' || (filter === 'group' ? c.isGroup : !c.isGroup))
+                    .filter(c => !searchQuery || getConversationDisplayTitle(c, currentUser, registeredUsers).toLowerCase().includes(searchQuery.toLowerCase()))
+                    .map(conv => {
+                      const isOnline = conv.isGroup || (conv.participants?.some(p => normalizePhone(p) !== normalizePhone(currentUser.phone) && onlinePhones.map(op => normalizePhone(op)).includes(normalizePhone(p))));
+                      const itemTitle = getConversationDisplayTitle(conv, currentUser, registeredUsers);
+                      return (
+                        <div 
+                          key={conv.id} 
+                          className={`conversation-item ${conv.id === activeId ? 'active' : ''}`}
+                          onClick={() => setActiveId(conv.id)}
+                        >
+                          <div className={`conv-status-dot ${isOnline ? 'online' : 'offline'}`} title={isOnline ? 'Online' : 'Offline'}></div>
+                          <div className="conv-details">
+                            <div className="conv-top-row">
+                              <span className="conv-name">{itemTitle}</span>
+                              <span className="conv-time">{conv.lastMessage?.timestamp}</span>
+                            </div>
+                            <div className="conv-bottom-row">
+                              <span className="conv-last-msg">{conv.lastMessage?.text || 'No messages yet'}</span>
+                              {conv.unreadCount > 0 && <span className="unread-badge">{conv.unreadCount}</span>}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                )}
+              </div>
+
+              {/* Online Connected Peers Section in Sidebar */}
+              <div style={{ padding: '0.75rem 1rem 0.65rem', borderTop: '1px solid var(--border-color)', marginTop: 'auto', background: 'var(--bg-surface)', flexShrink: 0 }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.45rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span>Connected Phones ({onlinePeers.length})</span>
+                  <span className="pulse-dot" style={{ width: '6px', height: '6px' }}></span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', maxHeight: '130px', overflowY: 'auto' }}>
+                  {onlinePeers.length === 0 ? (
+                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontStyle: 'italic', padding: '4px 0' }}>
+                      Waiting for other phones on Wi-Fi...
+                    </div>
+                  ) : (
+                    onlinePeers.map(u => {
+                      const isOnline = onlinePhones.map(p => normalizePhone(p)).includes(normalizePhone(u.phone));
+                      const uDisplayName = u.name || `User (${u.phone.slice(-4)})`;
+                      const uFormattedPhone = u.formattedPhone || formatDisplayPhone(u.phone);
+                      return (
+                        <div 
+                          key={u.phone}
+                          onClick={() => startChatWithUser(u)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '0.45rem 0.65rem',
+                            background: 'var(--bg-secondary)',
+                            borderRadius: 'var(--radius-sm)',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem',
+                            border: '1px solid var(--border-color)'
+                          }}
+                          title={`Click to start chat with ${uDisplayName}`}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', overflow: 'hidden' }}>
+                            <div className={`conv-status-dot ${isOnline ? 'online' : 'offline'}`} style={{ flexShrink: 0 }}></div>
+                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              <div style={{ fontWeight: 600, fontSize: '0.8rem' }}>{uDisplayName}</div>
+                              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>📱 {uFormattedPhone}</div>
+                            </div>
+                          </div>
+                          <i data-lucide="message-square-plus" style={{ width: '13px', height: '13px', color: 'var(--color-primary)', flexShrink: 0 }}></i>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            </aside>
+
+            {/* Chat Area (Active Conversation or Desktop Welcome Hub) */}
+            {activeConv ? (
+              <main className="chat-main">
+                <header className="chat-header">
+                  <div className="chat-header-info">
+                    {/* Mobile Back Button: Returns user to Conversation List */}
+                    <button 
+                      className="btn-icon mobile-back-btn" 
+                      onClick={() => setActiveId(null)}
+                      title="Back to conversation list"
+                    >
+                      <i data-lucide="arrow-left" style={{ width: '18px', height: '18px' }}></i>
+                    </button>
+                    <div>
+                      <h3 className="chat-header-title">{getConversationDisplayTitle(activeConv, currentUser, registeredUsers)}</h3>
+                      <div className="chat-header-subtitle">
+                        <span className="pulse-dot" style={{ width: '6px', height: '6px' }}></span>
+                        <span>Live Sync Active</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="chat-header-actions">
+                    <button className="btn-icon" onClick={() => setShowSearchInChat(!showSearchInChat)} title="Search in chat">
+                      <i data-lucide="search" style={{ width: '16px', height: '16px' }}></i>
+                    </button>
+                    <button className="btn-icon" onClick={() => setSummaryModal(true)} title="Generate AI Conversation Summary">
+                      <i data-lucide="file-text" style={{ width: '16px', height: '16px' }}></i>
+                    </button>
+                    <button className="btn-icon" onClick={() => setIsAiOpen(!isAiOpen)} title="Toggle AI Panel">
+                      <i data-lucide="sparkles" style={{ width: '16px', height: '16px' }}></i>
+                    </button>
+                  </div>
+                </header>
+
+                {/* In-Chat Search Bar */}
+                {showSearchInChat && (
+                  <div className="in-chat-search-bar">
+                    <i data-lucide="search" style={{ width: '15px', color: 'var(--text-muted)' }}></i>
+                    <input 
+                      type="text" 
+                      placeholder="Search keywords in this chat..." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      style={{ flex: 1, background: 'transparent', border: 'none', color: 'var(--text-primary)', outline: 'none', fontSize: '0.85rem' }}
+                    />
+                    {searchQuery && (
+                      <button className="btn-icon" style={{ width: '22px', height: '22px' }} onClick={() => setSearchQuery('')}>
+                        <i data-lucide="x" style={{ width: '13px' }}></i>
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Messages Feed */}
+                <div className="messages-stream">
+                  <div className="message-date-divider"><span>Today</span></div>
+                  
+                  {activeMsgs.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
+                      <i data-lucide="message-circle" style={{ width: '32px', height: '32px', margin: '0 auto 0.5rem', opacity: 0.4, color: 'var(--color-primary)' }}></i>
+                      <p style={{ fontSize: '0.85rem' }}>No messages yet in this conversation.</p>
+                      <span style={{ fontSize: '0.75rem' }}>Type a message, attach a picture, or record a voice note below!</span>
+                    </div>
+                  ) : (
+                    activeMsgs.map(msg => {
+                      const isMe = normalizePhone(msg.senderPhone) === normalizePhone(currentUser.phone) || msg.isMe;
+                      const senderDisplay = msg.senderName || formatDisplayPhone(msg.senderPhone);
+                      return (
+                        <div key={msg.id} className={`message-row ${isMe ? 'sent' : 'received'}`}>
+                          <div className="message-bubble">
+                            {!isMe && <span className="message-sender-name">{senderDisplay}</span>}
+                            
+                            {/* Text */}
+                            {msg.text && <p className="message-text">{msg.text}</p>}
+
+                            {/* Image Attachment (Click to open full in-app lightbox modal) */}
+                            {msg.image && (
+                              <div 
+                                className="image-attachment-wrapper"
+                                onClick={() => setLightboxImage({ src: msg.image, title: senderDisplay, timestamp: msg.timestamp })}
+                                style={{
+                                  marginTop: '6px',
+                                  marginBottom: '4px',
+                                  cursor: 'pointer',
+                                  position: 'relative',
+                                  display: 'inline-block',
+                                  borderRadius: '8px',
+                                  overflow: 'hidden',
+                                  border: '1px solid var(--border-color)',
+                                  maxWidth: '280px'
+                                }}
+                                title="Click to expand full picture"
+                              >
+                                <img 
+                                  src={msg.image} 
+                                  alt="Attached Photo"
+                                  style={{ 
+                                    maxWidth: '280px', 
+                                    maxHeight: '200px', 
+                                    width: '100%',
+                                    display: 'block',
+                                    objectFit: 'cover'
+                                  }} 
+                                />
+                                <div 
+                                  style={{
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    background: 'rgba(0,0,0,0.65)',
+                                    color: '#ffffff',
+                                    padding: '3px 8px',
+                                    fontSize: '0.72rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    backdropFilter: 'blur(4px)'
+                                  }}
+                                >
+                                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <i data-lucide="maximize-2" style={{ width: '12px', height: '12px' }}></i> Click to expand
+                                  </span>
+                                  <span style={{ fontSize: '0.68rem', opacity: 0.8 }}>HD Photo</span>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Real Voice Message Bubble with Interactive Player */}
+                            {msg.audio && (
+                              <VoiceNotePlayer msg={msg} />
+                            )}
+
+                            <div className="message-meta" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginTop: '4px' }}>
+                              <button 
+                                onClick={() => handleTranslate(msg.text)}
+                                style={{ background: 'transparent', border: 'none', color: 'var(--color-c1)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', fontWeight: 600, padding: 0 }}
+                                title="Translate this message"
+                              >
+                                <i data-lucide="languages" style={{ width: '12px', height: '12px' }}></i>
+                                <span>Translate</span>
+                              </button>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                <span>{msg.timestamp}</span>
+                                {isMe && <i data-lucide="check-check" style={{ width: '13px', height: '13px', color: '#60a5fa' }}></i>}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                  
+                  {/* Typing Indicator */}
+                  {typingUser && (
+                    <div className="typing-indicator">
+                      <span className="pulse-dot" style={{ width: '6px', height: '6px' }}></span>
+                      <span>{typingUser} is typing a reply...</span>
+                    </div>
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Smart Replies */}
+                <div className="smart-replies-container">
+                  <div className="smart-reply-label">
+                    <i data-lucide="sparkles" style={{ width: '14px', color: 'var(--color-c1)' }}></i>
+                    <span>Smart Replies:</span>
+                  </div>
+                  {smartReplies.map((r, i) => (
+                    <button key={i} className="smart-reply-chip" onClick={() => setInputText(r)}>
+                      <i data-lucide="zap" style={{ width: '12px', color: 'var(--color-c2)' }}></i>
+                      <span>{r}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Input Box */}
+                <div className="chat-input-container">
+                  {/* Image Attachment Button */}
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    ref={imageAttachmentRef} 
+                    style={{ display: 'none' }} 
+                    onChange={handleImageAttach} 
+                  />
+                  <button 
+                    className="btn-icon" 
+                    onClick={() => imageAttachmentRef.current && imageAttachmentRef.current.click()}
+                    title="Attach & Send Image / Photo"
+                  >
+                    <i data-lucide="paperclip" style={{ width: '17px', height: '17px' }}></i>
+                  </button>
+
+                  {/* Voice Note Button (Live Record & Send) */}
+                  <button 
+                    className="btn-icon" 
+                    style={isRecordingVoice ? { background: 'var(--color-danger)', color: 'white' } : {}}
+                    onClick={handleToggleVoiceRecord}
+                    title={isRecordingVoice ? 'Click to Stop & Send Voice Note' : 'Record Voice Note'}
+                  >
+                    <i data-lucide={isRecordingVoice ? "square" : "mic"} style={{ width: '17px', height: '17px' }}></i>
+                  </button>
+
+                  {isRecordingVoice ? (
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(242, 92, 84, 0.15)', border: '1px solid var(--color-danger)', padding: '0.6rem 0.85rem', borderRadius: 'var(--radius-md)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span className="pulse-dot" style={{ background: 'var(--color-danger)' }}></span>
+                        <span style={{ fontSize: '0.82rem', color: 'var(--color-danger)', fontWeight: 600 }}>Recording ({recordingSeconds}s)...</span>
+                      </div>
+                      <button 
+                        onClick={handleToggleVoiceRecord}
+                        style={{ background: 'var(--color-danger)', color: 'white', border: 'none', borderRadius: '4px', padding: '3px 8px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        Send
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="chat-input-wrapper">
+                      <textarea 
+                        className="chat-textarea" 
+                        placeholder="Type message across phones & PCs... (Press Enter to send)" 
+                        value={inputText}
+                        onChange={handleInputChange}
+                        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+                      />
+                    </div>
+                  )}
+
+                  <button className="btn-send" onClick={() => handleSend()} title="Send Message">
+                    <i data-lucide="send" style={{ width: '17px', height: '17px' }}></i>
+                  </button>
+                </div>
+              </main>
+            ) : (
+              /* Welcome Hub Screen When No Conversation Selected (Desktop) */
+              <main className="chat-main" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', textAlign: 'center', overflowY: 'auto' }}>
+                <div style={{ maxWidth: '500px', width: '100%', background: 'var(--bg-surface)', padding: '2.25rem 1.75rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-lg)' }}>
+                  <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.15rem' }}>
+                    <i data-lucide="radio" style={{ width: '26px', height: '26px' }}></i>
+                  </div>
+                  
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.45rem' }}>
+                    Welcome, {currentUser.name}!
+                  </h3>
+                  
+                  <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1.15rem' }}>
+                    Active Phone: <strong>{currentUser.formattedPhone || currentUser.phone}</strong>.<br/>
+                    Open this URL on your mobile phone or another device on Wi-Fi:
+                  </p>
+
+                  <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--color-primary)', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-md)', fontWeight: 700, fontSize: '0.98rem', color: 'var(--color-c1)', marginBottom: '1.15rem', userSelect: 'all' }}>
+                    {networkInfo.networkUrl || `http://${networkInfo.ip}:${networkInfo.port}`}
+                  </div>
+
+                  {/* Connected Peers Fast Select */}
+                  <div style={{ textAlign: 'left', marginBottom: '1.25rem' }}>
+                    <div style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                      Online Connected Phones ({onlinePeers.length}):
+                    </div>
+                    {onlinePeers.length === 0 ? (
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontStyle: 'italic', background: 'var(--bg-secondary)', padding: '0.75rem', borderRadius: '8px' }}>
+                        No other phones online yet. Open the link on your mobile phone or click "Start New Chat" to begin!
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', maxHeight: '160px', overflowY: 'auto' }}>
+                        {onlinePeers.map(u => {
+                          const uDisplayName = u.name || `User (${u.phone.slice(-4)})`;
+                          const uFormattedPhone = u.formattedPhone || formatDisplayPhone(u.phone);
+                          return (
+                            <div 
+                              key={u.phone}
+                              onClick={() => startChatWithUser(u)}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                padding: '0.55rem 0.75rem',
+                                background: 'var(--bg-secondary)',
+                                borderRadius: 'var(--radius-md)',
+                                cursor: 'pointer',
+                                border: '1px solid var(--border-color)'
+                              }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <div className="conv-status-dot online"></div>
+                                <div>
+                                  <div style={{ fontSize: '0.84rem', fontWeight: 600 }}>{uDisplayName}</div>
+                                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>📱 {uFormattedPhone}</div>
+                                </div>
+                              </div>
+                              <button className="btn-primary" style={{ fontSize: '0.74rem', padding: '0.3rem 0.65rem' }}>
+                                💬 Chat
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                    <button className="btn-primary" onClick={() => setNewChatModal(true)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '0.7rem' }}>
+                      <i data-lucide="message-square-plus" style={{ width: '16px', height: '16px' }}></i>
+                      <span>Start a New Chat</span>
+                    </button>
+                    <button className="btn-secondary" onClick={() => setDeviceConnectModal(true)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '0.7rem' }}>
+                      <i data-lucide="share-2" style={{ width: '16px', height: '16px' }}></i>
+                      <span>Share Web Link to Chat</span>
+                    </button>
+                  </div>
+                </div>
+              </main>
+            )}
+
+            {/* AI Assistant Right Panel */}
+            <aside className={`ai-panel ${isAiOpen ? 'open' : ''}`}>
+              <div className="ai-panel-header">
+                <div className="ai-panel-title">
+                  <i data-lucide="sparkles" style={{ color: 'var(--color-c1)', width: '18px', height: '18px' }}></i>
+                  <span>AI Assistant Suite</span>
+                </div>
+                <button className="btn-icon" onClick={() => setIsAiOpen(false)}>
+                  <i data-lucide="x" style={{ width: '16px', height: '16px' }}></i>
+                </button>
+              </div>
+
+              <div className="ai-panel-content">
+                {/* 1. Tone Polisher (5 Tones) */}
+                <div className="ai-feature-card">
+                  <span className="ai-feature-label">
+                    <i data-lucide="wand-2" style={{ color: 'var(--color-c2)', width: '16px', height: '16px' }}></i>
+                    Tone Polisher & Rephrase
+                  </span>
+                  <select className="ai-select" value={tone} onChange={(e) => setTone(e.target.value)}>
+                    <option value="formal">👔 Academic & Formal</option>
+                    <option value="casual">☕ Friendly & Casual</option>
+                    <option value="polite">🙏 Courteous & Polite</option>
+                    <option value="concise">⚡ Direct & Concise</option>
+                    <option value="persuasive">🚀 Persuasive & Inspiring</option>
+                  </select>
+                  <button className="btn-ai-action" onClick={handleRewrite}>
+                    <i data-lucide="wand-2" style={{ width: '14px', height: '14px' }}></i>
+                    <span>Rephrase Message</span>
+                  </button>
+                </div>
+
+                {/* 2. Multilingual Live Translation (10 Languages) */}
+                <div className="ai-feature-card">
+                  <span className="ai-feature-label">
+                    <i data-lucide="languages" style={{ color: 'var(--color-c3)', width: '16px', height: '16px' }}></i>
+                    Live Multilingual Translation
+                  </span>
+                  <select className="ai-select" value={lang} onChange={(e) => setLang(e.target.value)}>
+                    <option value="Hindi">🇮🇳 Hindi (हिन्दी)</option>
+                    <option value="Spanish">🇪🇸 Spanish (Español)</option>
+                    <option value="French">🇫🇷 French (Français)</option>
+                    <option value="German">🇩🇪 German (Deutsch)</option>
+                    <option value="Russian">🇷🇺 Russian (Русский)</option>
+                    <option value="Japanese">🇯🇵 Japanese (日本語)</option>
+                    <option value="Arabic">🇸🇦 Arabic (العربية)</option>
+                    <option value="Bengali">🇮🇳 Bengali (বাংলা)</option>
+                    <option value="Marathi">🇮🇳 Marathi (मराठी)</option>
+                  </select>
+                  <input 
+                    type="text"
+                    placeholder="Type custom text to translate..."
+                    value={customTranslateText}
+                    onChange={(e) => setCustomTranslateText(e.target.value)}
+                    style={{ width: '100%', padding: '0.45rem 0.7rem', background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '0.82rem', outline: 'none' }}
+                  />
+                  <button className="btn-ai-action" onClick={() => handleTranslate(customTranslateText || inputText)} disabled={isTranslating}>
+                    <i data-lucide="languages" style={{ width: '14px', height: '14px' }}></i>
+                    <span>{isTranslating ? 'Translating...' : `Translate to ${lang}`}</span>
+                  </button>
+                </div>
+
+                {/* 3. Meeting Summary & Export */}
+                <div className="ai-feature-card">
+                  <span className="ai-feature-label">
+                    <i data-lucide="file-text" style={{ color: 'var(--color-c1)', width: '16px', height: '16px' }}></i>
+                    Discussion Synopsis
+                  </span>
+                  <button className="btn-ai-action" onClick={() => setSummaryModal(true)}>
+                    <i data-lucide="file-text" style={{ width: '14px', height: '14px' }}></i>
+                    <span>Summarize Discussion</span>
+                  </button>
+                  <button className="btn-secondary" style={{ fontSize: '0.78rem', padding: '0.4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }} onClick={handleDownloadSummary}>
+                    <i data-lucide="download" style={{ width: '13px', height: '13px' }}></i>
+                    <span>Download Summary (.txt)</span>
+                  </button>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          {/* ========================================== */}
+          {/* EDIT DISPLAY NAME MODAL                    */}
+          {/* ========================================== */}
+          {profileModal && (
+            <div className="modal-overlay" onClick={() => setProfileModal(false)}>
+              <div className="modal-content" style={{ maxWidth: '420px' }} onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <i data-lucide="user-check" style={{ color: 'var(--color-c1)' }}></i>
+                    <h3>Edit Profile & Display Name</h3>
+                  </div>
+                  <button className="btn-icon" onClick={() => setProfileModal(false)}><i data-lucide="x"></i></button>
+                </div>
+                <form onSubmit={handleSaveProfileName}>
+                  <div className="modal-body" style={{ gap: '0.85rem' }}>
+                    <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.82rem' }}>
+                      <div style={{ color: 'var(--text-muted)' }}>Registered Phone Number:</div>
+                      <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>📱 {currentUser.formattedPhone || currentUser.phone}</div>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Display Name (Visible to everyone in chat)</label>
+                      <input 
+                        type="text" 
+                        className="form-input" 
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        placeholder="e.g. Abdul Mannan"
+                        required
+                        autoFocus
+                      />
+                    </div>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      This will update your name across all connected devices and chats in real time.
+                    </p>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn-secondary" onClick={() => setProfileModal(false)}>Cancel</button>
+                    <button type="submit" className="btn-primary">Save Changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================== */}
+          {/* IN-APP IMAGE LIGHTBOX MODAL (HIGH RESOLUTION) */}
+          {/* ========================================== */}
+          {lightboxImage && (
+            <div 
+              className="modal-overlay" 
+              style={{ zIndex: 9999, background: 'rgba(5, 7, 12, 0.94)', backdropFilter: 'blur(8px)', padding: '0.75rem' }}
+              onClick={() => setLightboxImage(null)}
+            >
+              <div 
+                style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  width: '100%', 
+                  maxWidth: '920px', 
+                  maxHeight: '92vh',
+                  background: 'var(--bg-surface)', 
+                  border: '1px solid var(--border-color)', 
+                  borderRadius: 'var(--radius-lg)', 
+                  overflow: 'hidden',
+                  boxShadow: 'var(--shadow-lg)'
+                }} 
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Lightbox Header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 1rem', borderBottom: '1px solid var(--border-color)', background: 'var(--bg-secondary)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', minWidth: 0 }}>
+                    <i data-lucide="image" style={{ width: '18px', height: '18px', color: 'var(--color-primary)', flexShrink: 0 }}></i>
+                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>{lightboxImage.title || 'Photo Attachment'}</div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Sent {lightboxImage.timestamp || 'recently'}</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+                    <a 
+                      href={lightboxImage.src} 
+                      download={`chat-photo-${Date.now()}.png`}
+                      className="btn-secondary"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', padding: '0.4rem 0.75rem', textDecoration: 'none', color: 'var(--text-primary)' }}
+                      title="Download Photo"
+                    >
+                      <i data-lucide="download" style={{ width: '13px', height: '13px' }}></i>
+                      <span>Download</span>
+                    </a>
+                    <button 
+                      className="btn-icon" 
+                      onClick={() => setLightboxImage(null)}
+                      title="Close viewer"
+                      style={{ width: '32px', height: '32px' }}
+                    >
+                      <i data-lucide="x" style={{ width: '15px', height: '15px' }}></i>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Centered Image Body */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem', background: '#080a0f', overflow: 'hidden', flex: 1 }}>
+                  <img 
+                    src={lightboxImage.src} 
+                    alt="Full Picture"
+                    style={{ maxWidth: '100%', maxHeight: '68vh', objectFit: 'contain', borderRadius: '6px' }}
+                  />
+                </div>
+
+                {/* Lightbox Footer */}
+                <div style={{ padding: '0.55rem 1rem', borderTop: '1px solid var(--border-color)', background: 'var(--bg-secondary)', fontSize: '0.74rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>High Resolution Preview</span>
+                  <span>Click outside or Close to return</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================== */}
+          {/* SHARE APP URL / MULTI-DEVICE ACCESS MODAL  */}
+          {/* ========================================== */}
+          {deviceConnectModal && (
+            <div className="modal-overlay" onClick={() => setDeviceConnectModal(false)}>
+              <div className="modal-content" style={{ maxWidth: '440px' }} onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <i data-lucide="share-2" style={{ color: 'var(--color-c1)' }}></i>
+                    <h3>Connect from Mobile Phone / Other Device</h3>
+                  </div>
+                  <button className="btn-icon" onClick={() => setDeviceConnectModal(false)}><i data-lucide="x"></i></button>
+                </div>
+                <div className="modal-body" style={{ textAlign: 'center', alignItems: 'center', gap: '0.85rem' }}>
+                  <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
+                    Open this URL in any mobile browser or on another computer on the same Wi-Fi:
+                  </p>
+                  
+                  <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--color-primary)', padding: '0.75rem 0.85rem', borderRadius: 'var(--radius-md)', width: '100%', fontWeight: 700, fontSize: '0.98rem', color: 'var(--color-c1)', userSelect: 'all', wordBreak: 'break-all' }}>
+                    {networkInfo.networkUrl || `http://${networkInfo.ip}:${networkInfo.port}`}
+                  </div>
+
+                  <button 
+                    className="btn-primary" 
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '0.65rem' }}
+                    onClick={() => {
+                      const url = networkInfo.networkUrl || `http://${networkInfo.ip}:${networkInfo.port}`;
+                      navigator.clipboard.writeText(url);
+                      alert('Web Link copied to clipboard!\nOpen it on your phone browser.');
+                    }}
+                  >
+                    <i data-lucide="copy" style={{ width: '15px', height: '15px' }}></i>
+                    <span>Copy Web Link</span>
+                  </button>
+
+                  <div style={{ textAlign: 'left', background: 'var(--bg-secondary)', padding: '0.75rem', borderRadius: '8px', width: '100%', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                    <div><strong>How to Log In from Phone:</strong></div>
+                    <div>1. Open the copied link in your mobile browser.</div>
+                    <div>2. Enter your unique mobile phone number and full name.</div>
+                    <div>3. Complete OTP verification (Code: <strong>1234</strong>).</div>
+                    <div>4. Enjoy live real-time person-to-person chat with AI assistance!</div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn-secondary" onClick={() => setDeviceConnectModal(false)}>Close</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* AI Suggestion Review Modal */}
+          {suggestionModal && (
+            <div className="modal-overlay" onClick={() => setSuggestionModal(null)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>{suggestionModal.type === 'translate' ? `AI Translation (${suggestionModal.targetLang})` : 'Review AI Suggestion (Human-in-the-Loop)'}</h3>
+                  <button className="btn-icon" onClick={() => setSuggestionModal(null)}><i data-lucide="x"></i></button>
+                </div>
+                <div className="modal-body">
+                  <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.85rem' }}>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 600 }}>ORIGINAL TEXT:</div>
+                    <div>{suggestionModal.original}</div>
+                  </div>
+                  <div className="form-group">
+                    <label style={{ fontSize: '0.8rem', color: 'var(--color-c1)' }}>Processed / Editable Output:</label>
+                    <textarea 
+                      className="chat-textarea" 
+                      style={{ minHeight: '80px', borderColor: 'var(--color-primary)' }}
+                      value={suggestionModal.suggested}
+                      onChange={(e) => setSuggestionModal({ ...suggestionModal, suggested: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn-secondary" onClick={() => setSuggestionModal(null)}>Discard</button>
+                  <button className="btn-secondary" onClick={() => { setInputText(suggestionModal.suggested); setSuggestionModal(null); }}>
+                    Insert in Input
+                  </button>
+                  <button className="btn-primary" onClick={() => { handleSend(suggestionModal.suggested); setSuggestionModal(null); }}>
+                    Send to Chat
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* AI Summary Modal */}
+          {summaryModal && (
+            <div className="modal-overlay" onClick={() => setSummaryModal(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>AI Conversation Summary</h3>
+                  <button className="btn-icon" onClick={() => setSummaryModal(false)}><i data-lucide="x"></i></button>
+                </div>
+                <div className="modal-body">
+                  <p style={{ fontSize: '0.88rem', lineHeight: '1.5' }}>
+                    Discussion regarding the <strong>AI-Integrated People Chat Application</strong> B.Tech IT Major Project (2026-2027) at AKGEC.
+                  </p>
+                  <h4 style={{ fontSize: '0.84rem', color: 'var(--color-c1)', marginTop: '0.4rem' }}>Key Points:</h4>
+                  <ul style={{ paddingLeft: '1.25rem', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
+                    <li>Cross-device real-time communication validated via unique Phone Number authentication.</li>
+                    <li>Human-in-the-Loop AI Assistant provides tone rewriting, live translation, and voice message support.</li>
+                    <li>Solid flat Coolors palette (#f7b267 to #f25c54) with zero visible scrollbars.</li>
+                  </ul>
+                  <h4 style={{ fontSize: '0.84rem', color: 'var(--color-c2)', marginTop: '0.4rem' }}>Action Items:</h4>
+                  <div style={{ fontSize: '0.84rem' }}>• [x] Real-time cross-device SSE hub running on port 3000.</div>
+                  <div style={{ fontSize: '0.84rem' }}>• [x] Phone number contact discovery and live peer syncing active.</div>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn-secondary" onClick={handleDownloadSummary}>Download (.txt)</button>
+                  <button className="btn-primary" onClick={() => setSummaryModal(false)}>Done</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================== */}
+          {/* START NEW CONVERSATION MODAL (PHONE)       */}
+          {/* ========================================== */}
+          {newChatModal && (
+            <div className="modal-overlay" onClick={() => setNewChatModal(false)}>
+              <div className="modal-content" style={{ maxWidth: '460px' }} onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>Start New Conversation</h3>
+                  <button className="btn-icon" onClick={() => setNewChatModal(false)}><i data-lucide="x"></i></button>
+                </div>
+
+                <div className="modal-body">
+                  {/* Tabs: Online Connected Phones vs Direct Phone Entry */}
+                  <div className="filter-tabs" style={{ padding: 0 }}>
+                    <button 
+                      className={`filter-tab ${newChatTab === 'online' ? 'active' : ''}`}
+                      onClick={() => setNewChatTab('online')}
+                    >
+                      Online Phones ({onlinePeers.length})
+                    </button>
+                    <button 
+                      className={`filter-tab ${newChatTab === 'direct' ? 'active' : ''}`}
+                      onClick={() => setNewChatTab('direct')}
+                    >
+                      Enter Phone Number
+                    </button>
+                  </div>
+
+                  {newChatTab === 'online' ? (
+                    <div>
+                      <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '0.65rem' }}>
+                        Connected phone peers on your Wi-Fi network:
+                      </p>
+                      {onlinePeers.length === 0 ? (
+                        <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '8px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.84rem' }}>
+                          <i data-lucide="wifi-off" style={{ width: '24px', height: '24px', margin: '0 auto 0.5rem', opacity: 0.5 }}></i>
+                          <div>No other phones currently connected.</div>
+                          <div style={{ fontSize: '0.75rem', marginTop: '4px' }}>
+                            Open <code style={{ color: 'var(--color-c1)' }}>{networkInfo.networkUrl}</code> on another mobile phone or switch to "Enter Phone Number" tab.
+                          </div>
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', maxHeight: '200px', overflowY: 'auto' }}>
+                          {onlinePeers.map((acc, idx) => {
+                            const accDisplayName = acc.name || `User (${acc.phone.slice(-4)})`;
+                            const accFormattedPhone = acc.formattedPhone || formatDisplayPhone(acc.phone);
+                            return (
+                              <div 
+                                key={idx}
+                                onClick={() => startChatWithUser(acc)}
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                  padding: '0.65rem 0.85rem',
+                                  background: 'var(--bg-secondary)',
+                                  borderRadius: 'var(--radius-md)',
+                                  cursor: 'pointer',
+                                  border: '1px solid var(--border-color)'
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                  <div className="conv-status-dot online"></div>
+                                  <div>
+                                    <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>{accDisplayName}</div>
+                                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>📱 {accFormattedPhone}</div>
+                                  </div>
+                                </div>
+                                <button className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.35rem 0.75rem' }}>
+                                  💬 Chat
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <form onSubmit={handleStartDirectChat} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                      <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                        Enter the phone number of the person you want to message:
+                      </p>
+                      <div className="form-group">
+                        <label className="form-label">Recipient's Mobile Phone Number</label>
+                        <input 
+                          type="tel" 
+                          className="form-input" 
+                          placeholder="e.g. +91 98765 43211 or 9876543211" 
+                          value={newChatPhone}
+                          onChange={(e) => setNewChatPhone(e.target.value)}
+                          required 
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Recipient's Name (Optional)</label>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          placeholder="e.g. Aditya Maurya" 
+                          value={newChatName}
+                          onChange={(e) => setNewChatName(e.target.value)}
+                        />
+                      </div>
+                      <button type="submit" className="btn-primary" style={{ padding: '0.65rem', marginTop: '0.25rem' }}>
+                        Start Conversation
+                      </button>
+                    </form>
+                  )}
+                </div>
+
+                <div className="modal-footer">
+                  <button className="btn-secondary" onClick={() => setNewChatModal(false)}>Close</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
